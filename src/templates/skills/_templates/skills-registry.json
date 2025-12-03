@@ -1,0 +1,144 @@
+{
+  "_comment": "스킬 레지스트리 - PRD 분석 후 적절한 스킬 추천에 사용",
+  "version": "1.0",
+
+  "official": {
+    "document": {
+      "name": "@anthropic/document-skills",
+      "description": "PDF, Excel, Word, PPT 처리",
+      "skills": ["pdf", "xlsx", "docx", "pptx"],
+      "when_to_use": ["문서 처리", "엑셀 분석", "PDF 생성", "보고서 작성"]
+    }
+  },
+
+  "recommended": {
+    "backend": {
+      "nextjs": {
+        "name": "nextjs-api-patterns",
+        "source": "builtin",
+        "description": "Next.js API Routes 패턴",
+        "when_to_use": ["Next.js 프로젝트", "API 개발", "서버리스"]
+      },
+      "express": {
+        "name": "express-patterns",
+        "source": "community",
+        "description": "Express.js 패턴",
+        "when_to_use": ["Express 프로젝트", "REST API"]
+      }
+    },
+    "frontend": {
+      "react": {
+        "name": "react-patterns",
+        "source": "builtin",
+        "description": "React 컴포넌트 패턴",
+        "when_to_use": ["React 프로젝트", "컴포넌트 개발"]
+      },
+      "nextjs": {
+        "name": "nextjs-frontend-patterns",
+        "source": "builtin",
+        "description": "Next.js App Router 패턴",
+        "when_to_use": ["Next.js 프로젝트", "SSR", "App Router"]
+      }
+    },
+    "database": {
+      "drizzle": {
+        "name": "drizzle-patterns",
+        "source": "builtin",
+        "description": "Drizzle ORM 패턴",
+        "when_to_use": ["Drizzle ORM", "PostgreSQL", "타입 안전"]
+      },
+      "prisma": {
+        "name": "prisma-patterns",
+        "source": "community",
+        "description": "Prisma ORM 패턴",
+        "when_to_use": ["Prisma", "다양한 DB"]
+      }
+    },
+    "styling": {
+      "tailwind": {
+        "name": "tailwind-shadcn-patterns",
+        "source": "builtin",
+        "description": "Tailwind + shadcn/ui 패턴",
+        "when_to_use": ["Tailwind CSS", "shadcn/ui", "UI 개발"]
+      }
+    },
+    "auth": {
+      "nextauth": {
+        "name": "nextauth-patterns",
+        "source": "builtin",
+        "description": "NextAuth.js 인증 패턴",
+        "when_to_use": ["Next.js 인증", "OAuth", "JWT"]
+      }
+    },
+    "deployment": {
+      "vercel": {
+        "name": "vercel-deployment",
+        "source": "builtin",
+        "description": "Vercel 배포 패턴",
+        "when_to_use": ["Vercel 배포", "서버리스"]
+      },
+      "github-actions": {
+        "name": "github-actions-patterns",
+        "source": "builtin",
+        "description": "GitHub Actions CI/CD",
+        "when_to_use": ["CI/CD", "자동화", "크론잡"]
+      }
+    },
+    "workflow": {
+      "git-commit": {
+        "name": "git-commit",
+        "source": "builtin",
+        "description": "Git 커밋/푸시 가이드",
+        "when_to_use": ["커밋해줘", "저장해줘", "푸시해줘", "업로드해줘"]
+      },
+      "session-protocol": {
+        "name": "session-protocol",
+        "source": "builtin",
+        "description": "세션 시작/종료 프로토콜, 컨텍스트 관리",
+        "when_to_use": ["작업 시작", "세션 시작", "이어서 작업", "세션 마무리", "작업 끝", "다음에 이어서"]
+      },
+      "code-review": {
+        "name": "code-review",
+        "source": "builtin",
+        "description": "스킬 기반 코드 리뷰",
+        "when_to_use": ["코드 리뷰해줘", "리뷰해줘", "체크해줘", "검토해줘", "커밋 전에 확인"]
+      }
+    }
+  },
+
+  "mapping_rules": {
+    "기술 스택 → 스킬": {
+      "Next.js": ["nextjs-api-patterns", "nextjs-frontend-patterns"],
+      "React": ["react-patterns"],
+      "Tailwind": ["tailwind-shadcn-patterns"],
+      "shadcn/ui": ["tailwind-shadcn-patterns"],
+      "Drizzle": ["drizzle-patterns"],
+      "Prisma": ["prisma-patterns"],
+      "NextAuth": ["nextauth-patterns"],
+      "Vercel": ["vercel-deployment"],
+      "GitHub Actions": ["github-actions-patterns"]
+    },
+    "기능 → 스킬": {
+      "PDF 처리": ["@anthropic/document-skills:pdf"],
+      "Excel 처리": ["@anthropic/document-skills:xlsx"],
+      "문서 생성": ["@anthropic/document-skills:docx"],
+      "인증": ["nextauth-patterns"],
+      "결제": ["payment-patterns"],
+      "실시간": ["realtime-patterns"]
+    },
+    "워크플로우 → 스킬": {
+      "커밋": ["git-commit"],
+      "저장": ["git-commit"],
+      "푸시": ["git-commit"],
+      "업로드": ["git-commit"],
+      "작업 시작": ["session-protocol"],
+      "세션 시작": ["session-protocol"],
+      "이어서": ["session-protocol"],
+      "세션 마무리": ["session-protocol"],
+      "작업 끝": ["session-protocol"],
+      "리뷰": ["code-review"],
+      "체크": ["code-review"],
+      "검토": ["code-review"]
+    }
+  }
+}

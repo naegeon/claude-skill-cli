@@ -1,0 +1,144 @@
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
+const templates = require('../utils/templates');
+const { copyDir, ensureDir } = require('../utils/file-helpers');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+const question = (query) => new Promise(resolve => rl.question(query, resolve));
+
+async function init(options) {
+  console.log('\n🚀 Claude Skill Framework 초기화\n');
+
+  const cwd = process.cwd();
+  const claudeDir = path.join(cwd, '.claude');
+
+  // 기존 .claude 폴더 확인
+  if (fs.existsSync(claudeDir)) {
+    if (!options.yes) {
+      const answer = await question('⚠️  .claude 폴더가 이미 존재합니다. 덮어쓸까요? (y/N): ');
+      if (answer.toLowerCase() !== 'y') {
+        console.log('취소되었습니다.');
+        rl.close();
+        return;
+      }
+    }
+  }
+
+  let projectType = options.type;
+  let selectedSkills = options.skills.split(',').map(s => s.trim());
+
+  // 대화형 모드
+  if (!options.yes) {
+    console.log('프로젝트 유형을 선택하세요:\n');
+    console.log('  [1] new       - 새 프로젝트 (PRD부터 시작)');
+    console.log('  [2] existing  - 기존 프로젝트 (분석 모드)');
+    console.log('  [3] hooks-only - Hook 시스템만 추가\n');
+
+    const typeAnswer = await question('선택 (1/2/3) [2]: ');
+    projectType = { '1': 'new', '2': 'existing', '3': 'hooks-only' }[typeAnswer] || 'existing';
+
+    if (projectType !== 'hooks-only') {
+      console.log('\n설치할 스킬을 선택하세요 (쉼표로 구분):\n');
+      const availableSkills = templates.listAvailable();
+      availableSkills.forEach((skill, i) => {
+        console.log(`  [${skill.name}] ${skill.description}`);
+      });
+      console.log('\n기본값: backend,frontend,database');
+
+      const skillAnswer = await question('\n스킬 선택: ');
+      if (skillAnswer.trim()) {
+        selectedSkills = skillAnswer.split(',').map(s => s.trim());
+      }
+    }
+  }
+
+  rl.close();
+
+  console.log('\n📁 프레임워크 설치 중...\n');
+
+  try {
+    // 1. .claude 디렉토리 생성
+    ensureDir(claudeDir);
+    ensureDir(path.join(claudeDir, 'hooks'));
+    ensureDir(path.join(claudeDir, 'skills'));
+    ensureDir(path.join(claudeDir, 'skills', '_templates'));
+    ensureDir(path.join(claudeDir, 'sync'));
+
+    // 2. settings.json 복사 (Hook 설정)
+    const settingsPath = path.join(claudeDir, 'settings.json');
+    templates.copyTemplate('settings.json', settingsPath);
+    console.log('  ✅ settings.json (Hook 설정)');
+
+    // 3. Hook 스크립트 복사
+    const hooks = ['session-start.sh', 'skill-enforcer.py', 'pre-commit-check.py', 'post-write.sh'];
+    hooks.forEach(hook => {
+      templates.copyTemplate(`hooks/${hook}`, path.join(claudeDir, 'hooks', hook));
+    });
+    console.log('  ✅ hooks/ (4개 스크립트)');
+
+    // 4. 기본 템플릿 복사
+    const baseTemplates = ['base-rules.md', 'architecture-change.md', 'project-analysis.md', 'skills-registry.json'];
+    baseTemplates.forEach(tmpl => {
+      templates.copyTemplate(`skills/_templates/${tmpl}`, path.join(claudeDir, 'skills', '_templates', tmpl));
+    });
+    console.log('  ✅ _templates/ (기본 규칙)');
+
+    // 5. 선택된 스킬 템플릿 복사
+    if (projectType !== 'hooks-only') {
+      selectedSkills.forEach(skill => {
+        const skillTemplate = `skills/_templates/${skill}.md`;
+        if (templates.exists(skillTemplate)) {
+          templates.copyTemplate(skillTemplate, path.join(claudeDir, 'skills', '_templates', `${skill}.md`));
+          console.log(`  ✅ ${skill}.md 스킬 템플릿`);
+        } else {
+          console.log(`  ⚠️  ${skill} 템플릿 없음 (동적 생성 필요)`);
+        }
+      });
+    }
+
+    // 6. session-handoff.md 생성
+    const handoffPath = path.join(claudeDir, 'sync', 'session-handoff.md');
+    templates.copyTemplate('sync/session-handoff.md', handoffPath);
+    console.log('  ✅ session-handoff.md');
+
+    // 7. 스킬 디렉토리 생성 (prd-generator, session-protocol, code-review)
+    const coreSkills = ['prd-generator', 'session-protocol', 'code-review'];
+    coreSkills.forEach(skill => {
+      const skillDir = path.join(claudeDir, 'skills', skill);
+      ensureDir(skillDir);
+      templates.copyTemplate(`skills/${skill}/SKILL.md`, path.join(skillDir, 'SKILL.md'));
+    });
+    console.log('  ✅ 코어 스킬 (prd-generator, session-protocol, code-review)');
+
+    console.log('\n✨ 설치 완료!\n');
+
+    // 다음 단계 안내
+    console.log('📋 다음 단계:\n');
+    if (projectType === 'new') {
+      console.log('  1. Claude Code 실행');
+      console.log('  2. "PRD 만들어줘" 입력');
+      console.log('  3. Q&A를 통해 PRD + 스킬 생성\n');
+    } else if (projectType === 'existing') {
+      console.log('  1. Claude Code 실행');
+      console.log('  2. "프로젝트 분석해줘" 입력');
+      console.log('  3. 기존 코드 분석 → 스킬 생성\n');
+    } else {
+      console.log('  1. Claude Code 실행');
+      console.log('  2. Hook이 자동으로 작동합니다');
+      console.log('  3. 필요시 "스킬 추가해줘" 입력\n');
+    }
+
+    console.log('📚 문서: https://github.com/your-repo/claude-skill\n');
+
+  } catch (error) {
+    console.error('❌ 설치 실패:', error.message);
+    process.exit(1);
+  }
+}
+
+module.exports = init;

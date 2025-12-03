@@ -1,0 +1,75 @@
+# ${PROJECT_NAME}
+
+> ${ONE_LINE_DESCRIPTION}
+
+---
+
+## 기술 스택
+
+| 영역 | 기술 | 버전 |
+|-----|------|-----|
+${TECH_STACK_TABLE}
+
+---
+
+## 스킬 가이드
+
+### 공식 스킬 (Anthropic)
+
+바로 사용 가능한 공식 스킬입니다.
+
+| 스킬 | 용도 | 사용법 |
+|-----|------|-------|
+| document-skills:pdf | PDF 처리 | "PDF 분석해줘" |
+| document-skills:xlsx | 엑셀 처리 | "엑셀 파일 읽어줘" |
+| document-skills:docx | Word 처리 | "문서 생성해줘" |
+
+### 프로젝트 스킬
+
+이 프로젝트에 맞게 구성된 스킬입니다.
+
+| 작업 | 스킬 | 설명 |
+|-----|------|------|
+${PROJECT_SKILLS_TABLE}
+
+---
+
+## 주요 명령어
+
+```bash
+${DEV_COMMANDS}
+```
+
+---
+
+## 전역 금지 사항
+
+- `any` 타입 사용 금지
+- 환경변수 하드코딩 금지
+- `.env` 파일 Git 커밋 금지
+- 인증 없는 API 금지
+- 200줄 초과 파일 금지
+
+---
+
+## 파일 네이밍
+
+| 유형 | 규칙 | 예시 |
+|-----|------|------|
+| 컴포넌트 | PascalCase | `UserCard.tsx` |
+| 페이지 | kebab-case 폴더 | `user-profile/page.tsx` |
+| 유틸/훅 | camelCase | `useAuth.ts` |
+
+---
+
+## 참조
+
+| 문서 | 설명 |
+|-----|------|
+| `PRD.md` | 전체 요구사항 |
+| `.claude/skills/` | 프로젝트 스킬 |
+| `.claude/sync/manifest.json` | 변경 추적 |
+
+---
+
+> **Tip**: PRD 변경 시 "PRD 변경사항 반영해줘"로 스킬 동기화

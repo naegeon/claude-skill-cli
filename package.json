@@ -1,0 +1,41 @@
+{
+  "name": "claude-skill",
+  "version": "1.0.0",
+  "description": "PRD 기반 AI 개발 워크플로우 프레임워크 - Hook을 통한 스킬 자동 강제 적용",
+  "main": "src/index.js",
+  "bin": {
+    "claude-skill": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node bin/cli.js --help",
+    "dev": "node bin/cli.js"
+  },
+  "dependencies": {
+    "commander": "^11.1.0"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "skill",
+    "prd",
+    "ai",
+    "anthropic",
+    "hooks",
+    "workflow",
+    "vibe-coding"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/naegeon/claude-skill-cli.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md"
+  ]
+}
