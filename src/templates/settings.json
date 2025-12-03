@@ -1,6 +1,6 @@
 {
   "$schema": "https://claude.ai/claude-code/settings.schema.json",
-  "_comment": "Claude Skills Framework - Hook System",
+  "_comment": "Claude Skills Framework - Hook System (Node.js)",
 
   "hooks": {
     "SessionStart": [
@@ -9,7 +9,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.sh\"",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.js\"",
             "timeout": 30
           }
         ]
@@ -22,7 +22,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/skill-enforcer.py\"",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/skill-enforcer.js\"",
             "timeout": 10
           }
         ]
@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-commit-check.py\"",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-commit-check.js\"",
             "timeout": 10
           }
         ]
@@ -45,7 +45,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-write.sh\"",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-write.js\"",
             "timeout": 30
           }
         ]

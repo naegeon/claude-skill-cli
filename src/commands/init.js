@@ -95,12 +95,12 @@ async function init(options) {
     templates.copyTemplate('settings.json', settingsPath);
     console.log('  ✅ settings.json (Hook 설정)');
 
-    // 3. Hook 스크립트 복사
-    const hooks = ['session-start.sh', 'skill-enforcer.py', 'pre-commit-check.py', 'post-write.sh'];
+    // 3. Hook 스크립트 복사 (Node.js)
+    const hooks = ['session-start.js', 'skill-enforcer.js', 'pre-commit-check.js', 'post-write.js'];
     hooks.forEach(hook => {
       templates.copyTemplate(`hooks/${hook}`, path.join(claudeDir, 'hooks', hook));
     });
-    console.log('  ✅ hooks/ (4개 스크립트)');
+    console.log('  ✅ hooks/ (4개 Node.js 스크립트)');
 
     // 4. 기본 템플릿 복사
     const baseTemplates = ['base-rules.md', 'architecture-change.md', 'project-analysis.md', 'skills-registry.json'];
